@@ -10,14 +10,13 @@ require_once('../lib/trex.php');
 $request = new Request($_SERVER);
 
 // create router
-$router = new Router($request);
+$router = new Router();
 
-// find resource controller.. can be chained to check multiple locations
-// will work with whatever it finds first
-$resource = $router->search('app/controllers');
+// direct the request to the correct resource
+$resource = $router->direct($request);
 
 // run the resource's code and expect a response
-$response = $resource->execute($request);
+$response = $resource->process($request);
 
 // send back to client
 echo $response->output();

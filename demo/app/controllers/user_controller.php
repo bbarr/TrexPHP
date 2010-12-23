@@ -2,9 +2,6 @@
 
 namespace Trex;
 
-/**
- *	@route /user
- */
 class UserController extends ResourceController {
 	
 	public function get($config = array()) {

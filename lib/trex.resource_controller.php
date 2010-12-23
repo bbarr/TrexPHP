@@ -9,7 +9,7 @@ abstract class ResourceController {
 	public abstract function put($data);
 	public abstract function delete();
 	
-	public function execute($resource) {
+	public function process($resource) {
 		$method = $resource->method;
 		$response = $this->$method();
 		return $response;
