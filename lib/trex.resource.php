@@ -2,7 +2,7 @@
 
 namespace Trex;
 
-abstract class ResourceController {
+abstract class Resource {
 	
 	public abstract function get($config = array());
 	public abstract function post($data);

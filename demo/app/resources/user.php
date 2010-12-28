@@ -2,7 +2,7 @@
 
 namespace Trex;
 
-class UserController extends ResourceController {
+class User extends Resource {
 	
 	public function get($config = array()) {
 		$response = new Response();

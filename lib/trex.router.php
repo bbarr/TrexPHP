@@ -4,27 +4,41 @@ namespace Trex;
 
 class Router {
 	
-	public $routes = array();
+	private $routes = array();
+	private $sending = null;
 	
-	public function __construct($nss = null) {
-		$this->nss = $nss;
+	public function send($uri) {
+		$this->sending = $uri;
+		return $this;
 	}
 	
-	public function add
+	public function to($resource_name) {
+		$this->routes[] = new _Route($resource_name, $this->sending);
+	}
 	
 	public function direct($request) {
-		
-		$segments = $request->uri_segments;
-		$nss = $this->nss;
-		
-		if ($segments)
-		
-		$resource_name = $segments[0];
-		
-		$resource_name = ($this->nss) ? $this->apply_namespaces($segments) : $segments[0];
-		$this->load($resource_name);
+		foreach ($this->routes as $route) {
+			if ($route->matches($request)) {
+				return new $route->target();
+			}
+		}
+	}
+}
+
+class _Route {
+	
+	public $uri;
+	public $target;
+	public $resource_name;
+	
+	public function __construct($resource_name, $uri) {
+		$this->uri = $uri;
+		$this->resource_name = $resource_name;
 	}
 	
+	public function matches($request) {
+		
+	}
 }
 
 ?>
