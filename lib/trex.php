@@ -7,5 +7,4 @@ require_once('../lib/trex.Response.php');
 require_once('../lib/trex.Resource.php');
 require_once('../lib/trex.Router.php');
 
-
 ?>

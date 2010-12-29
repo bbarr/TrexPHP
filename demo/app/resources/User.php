@@ -6,7 +6,9 @@ class User extends Trex\Resource {
 		
 		$response = new Trex\Response();
 		
-		$response->body = 'Look! It\'s User ' . $request->params['id'];
+		$response->status = 200;
+		
+		$response->header('Pragma', 'no-cache');
 		
 		return $response;
 	}

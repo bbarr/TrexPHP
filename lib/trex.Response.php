@@ -48,10 +48,38 @@ class Response {
 		505 => 'HTTP Version Not Supported'  
 	);
 	
+	/**
+	 *  RESPONSE PROPERTIES WITH DEFAULTS
+	 */
 	public $body;
+	public $status = 200;
+	public $headers = array(
+		'Content-Type' => 'text/html'
+	);
 	
-	public function output() {
-		echo $this->body;
+	public function header($name, $value) {
+		$this->headers[$name] = $value;
+	}
+	
+	/**
+	 *  Execute the response and deliver to client
+	 */
+	public function deliver() {
+		
+		// set HTTP type and response status
+		header('HTTP/1.1 ' . $this->status . ' ' . self::$http_codes[$this->status]);
+		
+		if ($this->body) {
+			$this->header('Content-Length', strlen($this->body));
+		}
+		
+		// cycle through and call custom headers
+		foreach ($this->headers as $name => $value) {
+			header($name . ': ' . $value);
+		}
+		
+		// finally, respond to the client
+		exit($this->body);
 	}
 }
 

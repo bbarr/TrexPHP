@@ -17,13 +17,14 @@ $router = new Router();
 $router->scan('app/resources');
 $router->send('/demo/user/{id}')->to('User');
 
-// direct the request to the correct resource
-$resource = $router->direct($request);
+// match request to route, extract params,
+// and return an instance of the matched route's resource
+$resource = $router->match($request);
 
 // run the resource's code and expect a response
 $response = $resource->process($request);
 
 // send back to client
-echo $response->output();
+$response->deliver();
 
 ?>
