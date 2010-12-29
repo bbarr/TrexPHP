@@ -15,7 +15,6 @@ $router = new Router();
 // set up the router with a location to scan for resources, and some routes
 // this could be done elsewhere, obviously!
 $router->scan('app/resources');
-$router->send('/demo/user')->to('User');
 $router->send('/demo/user/{id}')->to('User');
 
 // direct the request to the correct resource

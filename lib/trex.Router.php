@@ -34,21 +34,26 @@ class Router {
 class _Route {
 	
 	public $uri;
+	public $uri_segments;
 	public $resource;
 	
 	public function __construct($resource, $uri) {
 		$this->uri = $uri;
+		$this->uri_segments = explode('/', $uri);
 		$this->resource = $resource;
 	}
 	
 	public function matches($request, $locations) {
+		
+		if (!$this->match($request)) {
+			return false;
+		}
 		
 		foreach ($locations as $location) {
 			if ($this->scan_location($location)) {
 				return true;
 			}
 		}
-		
 	}
 	
 	private function scan_location($location) {
@@ -66,6 +71,31 @@ class _Route {
 				return true;
 			}
 		}
+	}
+	
+	private function match($request) {
+		
+		$params = array();
+		
+		foreach ($this->uri_segments as $index => $segment) {
+			
+			if ($segment === '') {
+				continue;
+			}
+			
+			if ($segment{0} === '{') {
+				$params[preg_replace("/\{|\}/", '', $segment)] = $request->uri_segments[$index];
+			}
+			else {
+				if ($segment !== $request->uri_segments[$index]) {
+					return false;
+				}
+			}
+		}
+		
+		$request->params = $params;
+		
+		return true;
 	}
 }
 

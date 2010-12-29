@@ -3,7 +3,7 @@
 namespace Trex;
 
 class Response {
-	
+
 	public static $http_codes = array(
 		100 => 'Continue',  
 		101 => 'Switching Protocols',  
@@ -48,8 +48,10 @@ class Response {
 		505 => 'HTTP Version Not Supported'  
 	);
 	
+	public $body;
+	
 	public function output() {
-		echo 'output!';
+		echo $this->body;
 	}
 }
 

@@ -2,25 +2,28 @@
 
 class User extends Trex\Resource {
 	
-	public function get($config = array()) {
+	public function get($request) {
+		
+		$response = new Trex\Response();
+		
+		$response->body = 'Look! It\'s User ' . $request->params['id'];
+		
+		return $response;
+	}
+	
+	public function post($request) {
 		$response = new Trex\Response();
 		
 		return $response;
 	}
 	
-	public function post($data) {
+	public function put($request) {
 		$response = new Trex\Response();
 		
 		return $response;
 	}
 	
-	public function put($data) {
-		$response = new Trex\Response();
-		
-		return $response;
-	}
-	
-	public function delete() {
+	public function delete($request) {
 		$response = new Trex\Response();
 		
 		return $response;

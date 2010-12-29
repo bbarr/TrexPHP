@@ -4,14 +4,14 @@ namespace Trex;
 
 abstract class Resource {
 	
-	public abstract function get($config = array());
-	public abstract function post($data);
-	public abstract function put($data);
-	public abstract function delete();
+	public abstract function get($request);
+	public abstract function post($request);
+	public abstract function put($request);
+	public abstract function delete($request);
 	
-	public function process($resource) {
-		$method = $resource->method;
-		$response = $this->$method();
+	public function process($request) {
+		$method = $request->method;
+		$response = $this->$method($request);
 		return $response;
 	}
 	
