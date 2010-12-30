@@ -1,0 +1,6 @@
+[submodule "demo/public/js/velo"]
+	path = demo/public/js/velo
+	url = git@github.com:bbarr/Velo.git
+[submodule "demo/public/js/rptr"]
+	path = demo/public/js/rptr
+	url = git@github.com:bbarr/Rptr.git

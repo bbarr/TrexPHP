@@ -1,11 +1,14 @@
 <?php
 
-class User extends Trex\Resource {
-	
-	public function get($request) {		
+class UserResource extends Trex\Resource {
+
+	public function get($request) {
 		$response = new Trex\Response();
-		$response->status = 200;		
-		$response->body = "Hi, user #" . $request->params['id'] . "... this is for story #" . $request->params['story_id'];
+		
+		
+		
+		$response->status = 200;
+		$response->body = json_encode($user);
 		return $response;
 	}
 	
