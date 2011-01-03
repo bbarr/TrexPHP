@@ -17,9 +17,8 @@ $router = new Router();
 // set up the router with a location to scan for resources, and some routes
 // this could be done elsewhere, obviously!
 $router->scan('resources');
-$router->send('/demo/api/user')->to('UserResource');
-$router->send('/demo/api/user/{id}')->to('UserResource');
-$router->send('/demo/api/story/{story_id}/user/{id}')->to('UserResource');
+$router->send('/demo/api/user')->to('User');
+$router->send('/demo/api/user/{id}')->to('User');
 
 // match request to route, extract params,
 // and return an instance of the matched route's resource
