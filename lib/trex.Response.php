@@ -4,7 +4,7 @@ namespace Trex;
 
 class Response {
 
-	public static $http_codes = array(
+	public static $HTTP_CODES = array(
 		100 => 'Continue',  
 		101 => 'Switching Protocols',  
 		200 => 'OK',  
@@ -47,7 +47,7 @@ class Response {
 		504 => 'Gateway Timeout',  
 		505 => 'HTTP Version Not Supported'  
 	);
-	
+
 	/**
 	 *  RESPONSE PROPERTIES WITH DEFAULTS
 	 */
@@ -67,7 +67,7 @@ class Response {
 	public function deliver() {
 		
 		// set HTTP type and response status
-		header('HTTP/1.1 ' . $this->status . ' ' . self::$http_codes[$this->status]);
+		header('HTTP/1.1 ' . $this->status . ' ' . self::$HTTP_CODES[$this->status]);
 		
 		if ($this->body) {
 			$this->header('Content-Length', strlen($this->body));

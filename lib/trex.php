@@ -1,5 +1,12 @@
 <?php
 
+/**
+ *  - Trex Bootstrap -
+ *
+ *  Just include this file, and the rest will follow
+ *  
+ */
+
 ini_set('display_errors', '2');
 
 require_once('trex.Request.php');

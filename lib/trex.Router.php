@@ -35,17 +35,16 @@ class Router {
 				
 				$resource = $route->resource;
 				
-				$file = $this->locate_resource($resource);
-				include($file);
+				if (!class_exists($resource)) {
+					$file = $this->locate_resource($resource);
+					include($file);	
+				}
 				
 				return new $resource();
 			}
 		}
 		
-		$response = new Response();
-		$response->status = 404;
-		$response->body = 'No route matched this URI.';
-		$response->deliver();
+		$this->resource_not_found();
 	}
 	
 	private function locate_resource($resource) {
@@ -61,6 +60,15 @@ class Router {
 				}
 			}
 		}
+		
+		$this->resource_not_found();
+	}
+	
+	private function resource_not_found() {
+		$response = new Trex\Response();
+		$response->status = 404;
+		$response->body = 'No route matched this URI.';
+		$response->deliver();
 	}
 }
 
