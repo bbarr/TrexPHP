@@ -30,7 +30,17 @@ class UserModel {
 	}
 	
 	public function fetch($id = null) {
-		return ($id) ? $_SESSION['users'][$id] : $_SESSION['users'];
+		if ($id !== null) {
+			if (is_array($_SESSION['users'])) {
+				if (array_key_exists($id, $_SESSION['users'])) {
+					return $_SESSION['users'][$id];
+				}
+			}
+			return false;
+		}
+		else {
+			return $_SESSION['users'];
+		}
 	}
 }
 
