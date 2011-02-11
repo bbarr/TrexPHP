@@ -1,32 +1,23 @@
 <?php
 
-// declare namespace
-namespace Trex;
-
-session_start();
-
-// load dependencies
 require_once('../../lib/trex.php');
+require_once('random_middleware.php');
 
-// create custom request
-$request = new Request($_SERVER);
 
-// create router
-$router = new Router();
+class EndApp {
+	public function call($env) {
+		return array(200, array('content-type' => 'text/html'), 'some text for the response');
+	}
+}
 
-// set up the router with a location to scan for resources, and some routes
-// this could be done elsewhere, obviously!
-$router->scan('resources');
-$router->resource('User')->at('/demo/api/user');
+$app = new Trex\Builder;
 
-// match request to route, extract params,
-// and return an instance of the matched route's resource
-$resource = $router->match($request);
+$app->use('ToUpper');
+$app->use('YellIt');
+$app->use('pretendWeMadeSomething');
 
-// run the resource's code and expect a response
-$response = $resource->process($request);
+$app->run(new EndApp);
 
-// send back to client
-$response->deliver();
+$app->call($_SERVER);
 
 ?>
