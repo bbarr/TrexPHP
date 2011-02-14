@@ -8,15 +8,15 @@ class Builder {
 	private $stack = array();
 	
 	private function freeze() {
-	
-		$this->frozen = true;
-		
+
 		// minus 2 to get index of last middleware
 		$count = count($this->stack) - 2;
 		while ($count > -1) {
 			$this->stack[$count] = $this->stack[$count]($this->stack[$count + 1]);
 			$count--;
 		}
+		
+		$this->frozen = true;
 	}
 	
 	private function to_stack($app) {
@@ -33,17 +33,12 @@ class Builder {
 		$this->freeze();
 	}
 	
-	public function call($request) {
+	public function call($env) {
 		
 		if (!$this->frozen) return;
 		
-		$request = new Request($request);
-
 		// fires the middleware stack
-		$result = $this->stack[0]->call($request);
-		
-		$response = new Response($result);		
-		$response->deliver();
+		return $this->stack[0]->call($env);
 	}
 	
 	public function __call($method, $args) {

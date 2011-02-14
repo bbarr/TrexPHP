@@ -16,6 +16,16 @@ class Request {
 	public $method;
 	public $params = array();
 	public $data = array();
+	
+	public $env = array(
+		'REQUEST_METHOD' => '',
+		'SCRIPT_NAME' => '',
+		'PATH_INFO' => '',
+		'QUERY_STRING' => '',
+		'SERVER_NAME' => '',
+		'SERVER_PORT' => '',
+		'HTTP_VARIABLES' => array()
+	);
 
 	/**
 	 *  Extracts necessary data from the $_SERVER variable
