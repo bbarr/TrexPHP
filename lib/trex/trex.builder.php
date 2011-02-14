@@ -22,7 +22,7 @@ class Builder {
 		$this->stack[] = $app;
 	}
 	
-	private function filter($middleware) {
+	public function filter($middleware) {
 		$this->to_stack(function($app) use ($middleware) { return new $middleware($app); });
 	}
 	
@@ -36,7 +36,7 @@ class Builder {
 		if (!$this->frozen) return;
 		
 		// fires the middleware stack
-		return $this->stack[0]->call($env);
+		return new Response($this->stack[0]->call($env));
 	}
 }
 

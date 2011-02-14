@@ -12,20 +12,11 @@ class Request {
 	
 	public $uri;
 	public $uri_segments;
-	public $query;
-	public $method;
 	public $params = array();
 	public $data = array();
 	
-	public $env = array(
-		'REQUEST_METHOD' => '',
-		'SCRIPT_NAME' => '',
-		'PATH_INFO' => '',
-		'QUERY_STRING' => '',
-		'SERVER_NAME' => '',
-		'SERVER_PORT' => '',
-		'HTTP_VARIABLES' => array()
-	);
+	// this is what applications will be expecting
+	public $env = array();
 
 	/**
 	 *  Extracts necessary data from the $_SERVER variable
@@ -33,52 +24,36 @@ class Request {
 	 *  @param {Array} - the $_SERVER variable for the current request
 	 */
 	public function __construct($server) {
+		
+		$env = array();
+		
+		$env['HTTP_VARIABLES'] = array();
+		foreach ($server as $key => $value) {
+			$env['HTTP_VARIABLES'][$key] = $value;
+		}
+		
+		$env['REQUEST_METHOD'] = $server['REQUEST_METHOD'];
+		$env['SCRIPT_NAME'] = $server['SCRIPT_NAME'];
+		$env['PATH_INFO'] = '';
+		$env['QUERY_STRING'] = $server['QUERY_STRING'];
+		$env['SERVER_NAME'] = $server['SERVER_NAME'];
+		$env['SERVER_PORT'] = $server['SERVER_PORT'];
+		$env['trex.version'] = \Trex::$VERSION;
+		$env['trex.uri'] = '';
+		$env['trex.segments'] = array();
+		$env['trex.url_scheme'] = (isset($server['HTTPS'])) ? 'HTTPS' : 'HTTP';
 
 		$this->method = $server['REQUEST_METHOD'];
 		$this->data = $_REQUEST;
-		
-		$uri = $server['REQUEST_URI'];
 		
 		// remove query string from uri and store it seperately
 		if (strpos($uri, '?') !== false) {
 			$uri_parts = explode('?', $uri);
 			$uri = $uri_parts[0];
-			$this->query = $uri_parts[1];
 		}
 		
-		$this->uri = $uri;
-		$this->uri_segments = explode('/', $uri);
-	}
-	
-	/**
-	 *  This matches a given route to the request uri,
-	 *  and if it matches, extracts params to Request::params
-	 *
-	 *  @param {String} - route to match
-	 */
-	public function matches($route) {
-	
-		if (count($route->uri_segments) !== count($this->uri_segments)) {
-			return false;
-		}
-	
-		foreach ($route->uri_segments as $index => $segment) {
-			
-			if ($segment === '') {
-				continue;
-			}
-			
-			if ($segment{0} === '{') {
-				$this->params[preg_replace("/\{|\}/", '', $segment)] = $this->uri_segments[$index];
-			}
-			else {
-				if ($segment !== $this->uri_segments[$index]) {
-					return false;
-				}
-			}
-		}
-
-		return true;
+		$env['trex.uri'] = $uri;
+		$env['trex.segments'] = explode('/', $uri);
 	}
 }
 

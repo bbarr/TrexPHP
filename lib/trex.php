@@ -10,4 +10,8 @@ require_once('trex/trex.builder.php');
 require_once('trex/trex.request.php');
 require_once('trex/trex.response.php');
 
+class Trex {
+	public static $VERSION = array(0, 1);
+}
+
 ?>

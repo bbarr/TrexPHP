@@ -10,6 +10,7 @@ class EndApp {
 }
 
 $app = new Trex\Builder;
+$env = new Trex\Request($_SERVER);
 
 $app->filter('ToUpper');
 $app->filter('YellIt');
@@ -17,8 +18,8 @@ $app->filter('pretendWeMadeSomething');
 
 $app->run(new EndApp);
 
-$response = $app->call(new Trex\Request($_SERVER));
+$response = $app->call($env);
 
-print_r($response);
+$response->deliver();
 
 ?>

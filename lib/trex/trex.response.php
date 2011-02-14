@@ -52,24 +52,36 @@ class Response {
 		504 => 'Gateway Timeout',  
 		505 => 'HTTP Version Not Supported'  
 	);
-
-	/**
-	 *  RESPONSE PROPERTIES WITH DEFAULTS
-	 */
+	
+	// defaults
 	public $body;
 	public $status = 200;
 	public $headers = array(
 		'Content-Type' => 'text/html'
 	);
 	
+	/** 
+	 *  Builds response using standard application response format
+	 *
+	 *  @param {Array} 
+	 */
 	public function __construct($response) {
+		
 		$this->status = $response[0];
+		
 		foreach ($response[1] as $key => $val) {
 			$this->header($key, $val);
 		}
+		
 		$this->body = $response[2];
 	}
 	
+	/**
+	 *  Sets header with $name => $value
+	 *
+	 *  @param {String}
+	 *  @param {String}
+	 */
 	public function header($name, $value) {
 		$this->headers[$name] = $value;
 	}
