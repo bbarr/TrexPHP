@@ -11,9 +11,9 @@ class EndApp {
 
 $app = new Trex\Builder;
 
-$app->use('ToUpper');
-$app->use('YellIt');
-$app->use('pretendWeMadeSomething');
+$app->filter('ToUpper');
+$app->filter('YellIt');
+$app->filter('pretendWeMadeSomething');
 
 $app->run(new EndApp);
 
