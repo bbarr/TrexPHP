@@ -1,5 +1,7 @@
 <?php
 
+namespace Trex;
+
 /**
  *  - Trex Router - 
  *

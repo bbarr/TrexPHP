@@ -1,6 +1,6 @@
 <?php
 
-namespace Pack;
+namespace Trex;
 
 class Builder {
 	
