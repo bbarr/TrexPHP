@@ -35,8 +35,6 @@ class BuilderTests extends PHPUnit_Framework_TestCase {
 		$this->builder->filter('someMiddleware');
 		$this->builder->call(array());
 	}
-	
-
 
 }
 
