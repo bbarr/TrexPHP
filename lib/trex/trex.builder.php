@@ -4,8 +4,8 @@ namespace Trex;
 
 class Builder {
 	
-	private $frozen = false;
-	private $stack = array();
+	public $frozen = false;
+	public $stack = array();
 	
 	private function freeze() {
 
@@ -18,7 +18,11 @@ class Builder {
 	}
 	
 	private function to_stack($app) {
-		if ($this->frozen) return;
+		
+		if ($this->frozen) {
+			throw new \Exception('Already have an end-app in the stack');
+		}
+		
 		$this->stack[] = $app;
 	}
 	
@@ -33,10 +37,14 @@ class Builder {
 	
 	public function call($env) {
 		
-		if (!$this->frozen) return;
-		
+		if (!$this->frozen) {
+			throw new \Exception('Missing end-app in stack');
+		}
+
 		// fires the middleware stack
-		$response = new Response($this->stack[0]->call($env));
+		$response = $this->stack[0]->call($env);
+
+		$response = Response::create($response);
 		$response->deliver();
 	}
 }

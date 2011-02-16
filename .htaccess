@@ -1,3 +1,0 @@
-RewriteEngine on
-RewriteCond $1 !^(bootstrap\.php|public|robots\.txt)
-RewriteRule ^(.*)$ bootstrap.php/$1 [L]

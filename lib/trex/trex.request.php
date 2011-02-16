@@ -9,7 +9,9 @@ namespace Trex;
  *  of matching routes and extracting params.. among other things.
  */
 class Request {
-		
+	
+	private static $instance;
+	
 	// this is what applications will be expecting
 	public $env = array();
 
@@ -33,7 +35,7 @@ class Request {
 		$env['QUERY_STRING'] = $server['QUERY_STRING'];
 		$env['SERVER_NAME'] = $server['SERVER_NAME'];
 		$env['SERVER_PORT'] = $server['SERVER_PORT'];
-		$env['pack.version'] = \Pack::$version;
+		$env['pack.version'] = \Trex::$version;
 		$env['pack.uri'] = '';
 		$env['pack.segments'] = array();
 		$env['pack.url_scheme'] = (isset($server['HTTPS'])) ? 'HTTPS' : 'HTTP';
@@ -50,6 +52,19 @@ class Request {
 		$env['pack.segments'] = explode('/', $uri);
 
 		$this->env = $env;
+	}
+	
+	public static function create($server = null) {
+		
+		if ( !(self::$instance instanceof Request) ) {
+			self::$instance = new Request($server);
+		}
+			
+		return self::$instance;
+	}
+	
+	public function param($key) {
+		return (isset($this->env['pack.data'][$key])) ? $this->env['pack.data'][$key] : false;
 	}
 }
 

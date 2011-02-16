@@ -9,54 +9,73 @@ namespace Trex;
  */
 class Response {
 
-	private $instance = null;
+	private static $instance;
 
 	// defaults
 	public $body = array();
 	public $status = 200;
-	public $headers = array(
-		'Content-Type' => 'text/plain'
-	);
+	public $headers = array( 'Content-Type' => 'text/plain' );
+
+	/**
+	 *  Called once, on first initialization
+	 */
+	public function __construct() {
+		
+		// start buffer
+		ob_start();
+	}
 	
 	/**
-	 *  Builds response using standard application response format
+	 *  Creates/returns an instance of Trex\Response
 	 *
 	 *  @param {Array} 
-	 */
-	public function __construct($response) {
-
-		if ($instance) {
-			$this->instance->update($response);
-			return $this->instance;
+	 */	
+	public static function create($response = null) {
+		
+		if ( !(self::$instance instanceof Response) ) {
+			self::$instance = new Response;
 		}
 
-		ob_start();
-		$this->update($response);
-		$this->instance = $this;
+		return ($response) ? self::$instance->update($response) : self::$instance; 
 	}
 	
-	private function update($response) {
+	/**
+	 *  Assigns response data to proper props
+	 *
+	 *  @param {Array}
+	 */
+	public function update($response) {	
 		
 		$this->status = $response[0];
+		$this->headers = $response[1];
+		$this->body = $response[2];
 		
-		foreach ($response[1] as $key => $val) {
-			$this->header($key, $val);
-		}
-		
-		foreach ($response[2] as $body_part) {
-			$this->body[] = $body_part;
-		}
+		return $this;
 	}
-	
+		
 	/**
 	 *  Sets header with $name => $value
 	 *
 	 *  @param {String}
 	 *  @param {String}
 	 */
-	public function header($name, $value) {
-		$this->headers[$name] = $value;
-	}
+	public function header($name, $value) { $this->headers[$name] = $value; }
+	
+	/**
+	 *  Confirms the response's Content-Type header 
+	 *
+	 *  @param {String} 
+	 */
+	public function is_type($type) { return $this->headers['Content-Type'] === $type; }
+	
+	/**
+	 *  Sets the response's Content-Type header 
+	 *
+	 *  @param {String} 
+	 */
+	public function type($type) { $this->headers['Content-Type'] = $type; }
+	
+	public function to_array() { return array($this->status, $this->headers, $this->body); }
 	
 	/**
 	 *  Execute the response and deliver to client
@@ -65,10 +84,10 @@ class Response {
 				
 		// set HTTP type and response status
 		header('HTTP/1.1 ' . $this->status . ' ' . self::$http_codes[$this->status]);
-		
+
 		// stringify body
 		$this->body = implode('', $this->body);
-		
+
 		// if status is 204 or 304, skip content-type and content-length
 		if (in_array($this->status, array(204, 304))) {
 			$this->body = '';
@@ -85,7 +104,7 @@ class Response {
 		}
 
 		echo $this->body;
-		
+
 		ob_flush();
 	}
 	
