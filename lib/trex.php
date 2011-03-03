@@ -1,17 +1,17 @@
 <?php
 
 /**
- *  - Trex Bootstrap -
- *
- *  Just include this file, and the rest will follow
- *  
- */
+ **  TrexPHP
+ **  
+ **  @author Brendan Barr brendanbarr.web@gmail.com
+ **/
 
-ini_set('display_errors', '2');
+require_once('trex/trex.builder.php');
+require_once('trex/trex.request.php');
+require_once('trex/trex.response.php');
 
-require_once('trex.Request.php');
-require_once('trex.Response.php');
-require_once('trex.Resource.php');
-require_once('trex.Router.php');
+class Trex {
+	public static $version = array(0, 1);
+}
 
 ?>

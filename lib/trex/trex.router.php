@@ -2,12 +2,15 @@
 
 namespace Trex;
 
+/**
+ *  - Trex Router - 
+ *
+ *  Responsible for handling routing
+ */
 class Router {
 	
 	private $routes = array();
 	private $locations = array();
-	
-	private $sending = null;
 	
 	public function scan($location) {
 		
@@ -18,6 +21,20 @@ class Router {
 		$this->locations[] = $location;
 	}
 	
+	public function route($url, $handler) {		
+		
+		if (is_callable($handler)) {
+			
+			// if handler is callback function
+			$this->routes[] = new _Route($url, $handler, true);
+		}
+		else {
+			
+			// else just routing to a resource or a class::action
+			$this->routes[] = new _Route($url, $handler);
+		}
+	}
+	
 	public function send($uri) {
 		$this->sending = $uri;
 		return $this;
@@ -25,6 +42,16 @@ class Router {
 	
 	public function to($resource) {
 		$this->routes[] = new _Route($resource, $this->sending);
+	}
+	
+	public function resource($resource) {
+		$this->resource = $resource;
+		return $this;
+	}
+	
+	public function at($uri) {
+		$this->routes[] = new _Route($this->resource, $uri);
+		$this->routes[] = new _Route($this->resource, $uri . '/{id}');
 	}
 	
 	public function match($request) {
@@ -65,7 +92,7 @@ class Router {
 	}
 	
 	private function resource_not_found() {
-		$response = new Trex\Response();
+		$response = new Response();
 		$response->status = 404;
 		$response->body = 'No route matched this URI.';
 		$response->deliver();
@@ -73,23 +100,29 @@ class Router {
 }
 
 /**
- *  PRIVATE
+ *  - Trex Route -
  *  
- *  This class will grow when Trex supports namespaced resources
- *
- *  @param {String} - the name of the resource we are linking to
  *  @param {String} - the URI template we are routing
+ *  @param {String|Function} - A callback function, or a resource name, or a controller:action
  */
-class _Route {
+class Route {
 	
 	public $uri;
 	public $uri_segments;
 	public $resource;
+	public $callback;
 	
-	public function __construct($resource, $uri) {
+	public function __construct($uri, $handler, $has_callback) {
+		
 		$this->uri = $uri;
 		$this->uri_segments = explode('/', $uri);
-		$this->resource = $resource;
+		
+		if ($has_callback) {
+			$this->callback = $handler
+		}
+		else {
+			$this->resource = $handler;	
+		}
 	}
 }
 
